@@ -6,3 +6,12 @@ Please cite:
 Bindoff, A., Wotherspoon, S., Guinet, C., & Hindell, M. (in-press) "Twilight free geolocation from noisy light data", *Methods in Ecology & Evolution*
 
 Known bugs:  the default track using `trip(fit, type = "full")` returns the maximum *a posteori* estimate (MAP estimate) for each day. If possible locations straddle the equator, sometimes the MAP estimate for a particularly day is obviously in the wrong hemisphere (the algorithm picks a mathematically plausible but ecologically implausible solution). Calling `essieRaster(fit)` and finding the MAP estimate for the appropriate hemisphere is a useful solution, but a simpler solution is currently in development.
+
+
+### Installation:  
+
+`# install.packages("devtools")`  
+`install_github("ABindoff/TwilightFree")`  
+`install_github("SGAT")`  
+`install_github("BAStag")`  
+

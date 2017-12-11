@@ -14,7 +14,7 @@
 makeGrid <- function(lon = c(-180, 180), lat = c(-90, 90), cell.size = 1, mask = "sea", pacific = FALSE) {
   data(wrld_simpl, package = "maptools", envir = environment())
   if(pacific){
-    wrld_simpl <- maptools::nowrapRecenter(wrld_simpl, avoidGEOS = TRUE)}
+    wrld_simpl <- nowrapRecenter(wrld_simpl, avoidGEOS = TRUE)}
   nrows <- abs(lat[2L] - lat[1L]) / cell.size
   ncols <- abs(lon[2L] - lon[1L]) / cell.size
   grid <- raster(

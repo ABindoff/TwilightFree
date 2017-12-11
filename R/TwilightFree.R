@@ -12,6 +12,7 @@ require(raster)
 #' @param retrieved.at retrieval location c(lon, lat) for last day of observation
 #' @param fixd optional data.frame of fixed (known) locations containing `Date`, `Lon`, `Lat` (will overwrite deployed.at and retrieved.at locations if != NULL)
 #' @param sst raster of SST data from NOAA OI SST
+#' @importFrom stats dgamma dnorm median
 #' @export
 #' @return a TwilightFree model object which can be fitted using SGAT::essie()
 TwilightFree <- function(df,

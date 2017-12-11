@@ -10,6 +10,9 @@
 #' @import maptools
 #' @import polyclip
 #' @import raster
+#' @importFrom grDevices colorRampPalette
+#' @importFrom graphics abline par points
+#' @importFrom utils data
 drawTracks <- function(gls,
                        gps = NULL,
                        col = "firebrick",

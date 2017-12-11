@@ -5,12 +5,15 @@ A new method of geolocation using GLS tag (ambient light) data. TwilightFree has
 Please cite:
 Bindoff, A., Wotherspoon, S., Guinet, C., & Hindell, M. (in-press) "Twilight free geolocation from noisy light data", *Methods in Ecology & Evolution*
 
-Known bugs:  the default track using `trip(fit, type = "full")` returns the maximum *a posteori* estimate (MAP estimate) for each day. If possible locations straddle the equator, sometimes the MAP estimate for a particularly day is obviously in the wrong hemisphere (the algorithm picks a mathematically plausible but ecologically implausible solution). Calling `essieRaster(fit)` and finding the MAP estimate for the appropriate hemisphere is a useful solution, but a simpler solution is currently in development.
+Known bugs:  
+- the default track using `trip(fit, type = "full")` returns the maximum *a posteori* estimate (MAP estimate) for each day. If possible locations straddle the equator, sometimes the MAP estimate for a particularly day is obviously in the wrong hemisphere (the algorithm picks a mathematically plausible but ecologically implausible solution). Calling `essieRaster(fit)` and finding the MAP estimate for the appropriate hemisphere is a useful solution, but a simpler solution is currently in development.  
+- you may need to run `install.packages("raster", repos = "https://cran.csiro.au/")` before you can load TwilightFree or SGAT. If you already have `raster` installed, you may need to run `remove.packages("raster")` first and re-install it from the repo at CSIRO. It's one of the great mysteries.  
 
 
 ### Installation:  
 
-`# install.packages("devtools")`  
+`# install.packages("devtools")` 
+`# install.packages("raster", repos = "https://cran.csiro.au/")`  
 `install_github("ABindoff/TwilightFree")`  
 `install_github("SWotherspoon/SGAT")`  
 `install_github("SWotherspoon/BAStag")`  

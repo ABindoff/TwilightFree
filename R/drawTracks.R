@@ -9,9 +9,9 @@
 #' @export
 #' @import maptools
 #' @import polyclip
-drawTracks <- function(trip, gps = NULL, col = "firebrick", gps.col = "dodgerblue", point.cols = c("red","springgreen","royalblue"), main = "", pacific = F){
-  xlm <- range(c(trip$Lon, gps$Lon))
-  ylm <- range(c(trip$Lat, gps$Lat))
+drawTracks <- function(gls, gps = NULL, col = "firebrick", gps.col = "dodgerblue", point.cols = c("red","springgreen","royalblue"), main = "", pacific = F){
+  xlm <- range(c(gls$Lon, gps$Lon))
+  ylm <- range(c(gls$Lat, gps$Lat))
   data(wrld_simpl, package = "maptools", envir = environment())
 
   if(pacific){
@@ -26,11 +26,11 @@ drawTracks <- function(trip, gps = NULL, col = "firebrick", gps.col = "dodgerblu
 
   if(!is.null(point.cols)){
     colfunc <- colorRampPalette(point.cols)
-    points(cbind(jitter(trip$Lon), jitter(trip$Lat)), col = colfunc(nrow(trip)))}
+    points(cbind(jitter(gls$Lon), jitter(gls$Lat)), col = colfunc(nrow(trip)))}
 
   if(!is.null(gps)){
     lines(cbind(gps$Lon, gps$Lat), col = gps.col)}
 
-  lines(cbind(trip$Lon, trip$Lat), col = col)
+  lines(cbind(gls$Lon, gls$Lat), col = col)
 
 }

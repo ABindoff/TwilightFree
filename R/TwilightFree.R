@@ -65,13 +65,13 @@ TwilightFree <- function(df,
     slice_date <- lapply(slices, function(x) min(x$Date))
     slice_date <- as.vector(unlist(lapply(slice_date, function(x)
       as.character(strptime(x, format = "%Y-%m-%d")))))
-    indx <- which(slice_date %in% locs$Date)
-    fixd <- matrix(0, length(slices), 3)
+    indx <- which(slice_date %in% fixd$Date)
+    locs <- matrix(0, length(slices), 3)
     for (i in seq_along(indx)) {
-      fixd[indx[i], ] <- c(locs$Lon[i], locs$Lat[i], 1)
+      locs[indx[i], ] <- c(fixd$Lon[i], fixd$Lat[i], 1)
     }
-    x0 <- fixd[, 1:2]
-    fixed <- as.logical(fixd[, 3])
+    x0 <- locs[, 1:2]
+    fixed <- as.logical(locs[, 3])
   }
 
 

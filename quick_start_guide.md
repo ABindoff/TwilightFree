@@ -14,10 +14,13 @@ First we need to load some R packages. The SGAT package (<https://github.com/SWo
 # install.packages("devtools")
 # devtools::install_github("SWotherspoon/SGAT")
 # devtools::install_github("SWotherspoon/BAStag")  
+# devtools::install_github("ABindoff/TwilightFree")  
+
 library(SGAT)
 library(BAStag)
 library(readr)
 library(TwilightFree)
+library(raster)
 ```
 
 This function constructs and returns a model which we will fit later using a forward-backward algorith. It takes a number of necessary parameters and you need to know something about them to use this method successfully, so we will go through them briefly here.
@@ -41,8 +44,10 @@ You can check your grid by calling `plot(grid)`
 
 ``` r
 grid <- makeGrid(c(45, 115), c(-65, -35), cell.size = 1, mask = "sea", pacific = T)  # Kerguelen
-# plot(grid)
+plot(grid)
 ```
+
+![](quick_start_guide_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-1-1.png)
 
 Now we have all the functions we need to fit a model, we'll load in some data and begin!
 
@@ -86,7 +91,7 @@ head(d.lig)
 lightImage(d.lig, offset = 5, zlim = c(0,130))
 ```
 
-![](quick_start_guide_files/figure-markdown_github/load_data-1.png)
+![](quick_start_guide_files/figure-markdown_github-ascii_identifiers/load_data-1.png)
 
 The plot above shows the time series. The pixels represent the observed light, so white pixels are full daylight and black pixels are complete darkness. You can only just make out night in this plot because the seal spends so much time diving deeply, and the light sensor on this tag picks up moonlight quite easily.
 
@@ -99,7 +104,7 @@ day <- as.POSIXct("2009-11-03 00:00:00", "UTC")
 thresh <- calibrate(d.lig, day, 75.863, -47.841, zen)
 ```
 
-![](quick_start_guide_files/figure-markdown_github/calibrate95-1.png)
+![](quick_start_guide_files/figure-markdown_github-ascii_identifiers/calibrate95-1.png)
 
     ## [1] "max light in night window: 138.2 assuming a solar zenith angle of: 95"
 
@@ -111,7 +116,7 @@ zen <- 97
 thresh <- calibrate(d.lig, day, 75.863, -47.841, zen) * 1.10
 ```
 
-![](quick_start_guide_files/figure-markdown_github/calibrate97-1.png)
+![](quick_start_guide_files/figure-markdown_github-ascii_identifiers/calibrate97-1.png)
 
     ## [1] "max light in night window: 116.8 assuming a solar zenith angle of: 97"
 
@@ -162,4 +167,4 @@ gps <- read_csv(gps, skip = 0,
 drawTracks(gls = trip(fit, type = "full"), gps = gps, pacific = TRUE)
 ```
 
-![](quick_start_guide_files/figure-markdown_github/unnamed-chunk-2-1.png)
+![](quick_start_guide_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-2-1.png)

@@ -12,6 +12,6 @@ Known bugs:  the default track using `trip(fit, type = "full")` returns the maxi
 
 `# install.packages("devtools")`  
 `install_github("ABindoff/TwilightFree")`  
-`install_github("SGAT")`  
-`install_github("BAStag")`  
+`install_github("SWotherspoon/SGAT")`  
+`install_github("SWotherspoon/BAStag")`  
 

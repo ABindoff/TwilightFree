@@ -9,14 +9,21 @@
 #' @export
 #' @import maptools
 #' @import polyclip
-drawTracks <- function(gls, gps = NULL, col = "firebrick", gps.col = "dodgerblue", point.cols = c("red","springgreen","royalblue"), main = "", pacific = F){
+#' @import raster
+drawTracks <- function(gls,
+                       gps = NULL,
+                       col = "firebrick",
+                       gps.col = "dodgerblue",
+                       point.cols = c("red","springgreen","royalblue"),
+                       main = "",
+                       pacific = F){
   xlm <- range(c(gls$Lon, gps$Lon))
   ylm <- range(c(gls$Lat, gps$Lat))
   data(wrld_simpl, package = "maptools", envir = environment())
 
   if(pacific){
     wrld_simpl <- nowrapRecenter(wrld_simpl, avoidGEOS = TRUE)}
-  p <- plot(wrld_simpl,xlim=xlm,ylim=ylm,
+  plot(wrld_simpl,xlim=xlm,ylim=ylm,
             col="grey90",border="grey80", main = main, axes = T)
   xlm <- par()$usr[1:2]
   ylm <- par()$usr[3:4]

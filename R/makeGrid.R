@@ -8,6 +8,8 @@
 #' @export
 #' @import maptools
 #' @import polyclip
+#' @import raster
+#' @import sp
 #' @return raster object giving the locations the animal may have visited
 makeGrid <- function(lon = c(-180, 180), lat = c(-90, 90), cell.size = 1, mask = "sea", pacific = FALSE) {
   data(wrld_simpl, package = "maptools", envir = environment())

@@ -22,6 +22,7 @@ First we need to load some R packages. The SGAT package (https://github.com/SWot
 library(SGAT)
 library(BAStag)
 library(readr)
+library(TwilightFree)
 ```
 
   
@@ -54,7 +55,7 @@ You can check your grid by calling `plot(grid)`
 
 ```{r}
 grid <- makeGrid(c(45, 115), c(-65, -35), cell.size = 1, mask = "sea", pacific = T)  # Kerguelen
-plot(grid)
+# plot(grid)
 ```
 
 
@@ -131,8 +132,7 @@ Let's have a look at the track - but first we need a function to turn the fitted
 ```{r}
 #  filtered GPS positions
 gps <- "https://raw.githubusercontent.com/ABindoff/geolocationHMM/master/86372_filteredGPS.csv"
-gdat <- read_csv(gps, skip = 0, 
+gps <- read_csv(gps, skip = 0, 
                    col_names = c("Date", "Lon","Lat"))
-head(gdat)
-drawTracks(trip(fit, type = "full"), gps = gdat, pacific = TRUE)
+drawTracks(gls = trip(fit, type = "full"), gps = gps, pacific = TRUE)
 ```

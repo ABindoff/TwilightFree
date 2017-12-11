@@ -1,0 +1,15 @@
+Package: TwilightFree
+Type: Package
+Title: Reconstruct animal tracks from GLS tag data
+Version: 0.1.0
+Author: Bindoff, A., Wotherspoon, S.
+Maintainer: <bindoffa@utas.edu.au>
+Description: Geolocation using ambient light data from GLS tags. Robust to substantial noise (shading).
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1.9000
+Imports: SGAT,
+    raster,
+    maptools,
+    polyclip

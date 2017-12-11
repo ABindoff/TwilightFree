@@ -1,0 +1,138 @@
+---
+title: "twilightfree_quick_start_guide"
+author: "Bindoff, A."
+date: "11 December 2017"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Quick-start guide to geolocation using the TwilightFree method
+
+The TwilightFree method of light-based geolocation (Bindoff et al.) takes a sequence of light and date-time observations, and optionally sea surface temperature and known locations, to reconstruct the movements of animals. This quick-start guide introduces the functions written in R with minimal explanation, and demonstrates how to process a track using light data and known start and finish locations. Future tutorials will demonstrate how to incorporate sea surface temperature data in the analysis. If you just want to load some data and get started without learning about the functions, scroll down to "Load data and fit a model".
+
+First we need to load some R packages. The SGAT package (https://github.com/SWotherspoon/SGAT) includes a function which is required by TwilightFree, and BAStag (https://github.com/SWotherspoon/BAStag) includes some functions which will be very helpful. Because these functions are not hosted on the CRAN repository, I have included instructions for installing them from GitHub using `devtools`. These instructions have been commented, so remove the `#` characters first if you need to install SGAT and BAStag this time. Other packages can be installed the usual way, by typing install.packages("package_name_here") into your console.
+
+```{r libraries, warning = F, message = F}
+# install.packages("devtools")
+# devtools::install_github("SWotherspoon/SGAT")
+# devtools::install_github("SWotherspoon/BAStag")  
+library(SGAT)
+library(BAStag)
+library(readr)
+```
+
+  
+This function constructs and returns a model which we will fit later using a forward-backward algorith. It takes a number of necessary parameters and you need to know something about them to use this method successfully, so we will go through them briefly here.
+
+`df` is a data.frame of light and date-time observations (at a minimum). It may also contain sea surface temperature observations and other data which will be ignored. The important thing is that it has a column named `Light` and another column named `Date`.  
+The rows of the Light column are the light observations. There are very few restrictions on this but some tags store observations on a log scale and may need to be rescaled in order to determine a good threshold (more on this later). The rows of the Date column are the date and time data that tell us precisely when the observation occurred. It is crucial that these are in GMT or UTC time, and they need to be in POSIXct "%Y-%m-%d %H:%M:%S" format, which means a four digit year, two digit month and two digit day separated with a dash `-`, followed by hours, minutes, seconds separated with a colon `:`.  
+`beta` are the hyper-parameters describing the assumed distribution of daily movements. For flexibility these are the shape and scale parameters of a Gamma distribution, and in practice the shape parameter works best set to 1.
+`alpha` are the hyper-parameters describing the assumed distribution of shading on the sensor at or around twilight. Again, for flexibility these are the shape and scale parameters of a Gamma distribution, and in practice a shape parameter of 1 works best.
+`alpha` and `beta` must be chosen using prior knowledge. Although the method isn't wildly sensitive to these parameters, accuracy and precision are worthy goals. Double-tag data can be very helpful here, for example putting at least one ARGOS tag on an animal in your study. As the method is new, a database of previous tracks does not yet exist. If you have data from a double-tag study and have found optimal hyper-parameters, email the authors with the species, time of year and duration of the study, the alpha and beta hyper-parameters, and the type of satellite tag and light tag and we will add these to a database to help our community.  
+`zenith` refers to the solar zenith angle assumed to represent twilight. This is typically 95-97 degrees.  
+`threshold` refers to the ambient light level when twilight occurs. More on choosing this below.  
+`deployed.at` is the location at which the tag was deployed, c(lon, lat)  
+`retrieved.at` is the location at which the tag was retrieved, c(lon, lat)  
+If either of these are unknown, simply exclude those parameters and the model will estimate them from the data.
+
+
+Before a tag is deployed, it is good practice to collect data for a few days at a fixed location within a few degrees of latitude of where the tag will be deployed. The clock on the tag should be set precisely using UTC/GMT time first, and a GPS used to determine the fixed calibration location.  
+`calibrate` takes the (Light, Date) dataframe, a single day from the calibration period, the longitude and latitude the tag was calibrated at, and a guess at the solar zenith angle. From this is returns a plot of the light data trace over that day (in red), and the theoretical light (in black). These should correspond for the night period. `calibrate` returns a threshold, which is the maximum light observed during the night period. You should use calibrate for each day of calibration and choose the maximum threshold returned. You may need to change `zenith` to adjust the window of night so that this value makes sense.
+
+
+
+TwilightFree produces the track using a grid of locations representing all the places on earth the animal is likely to have visited. You need to provide a grid to the model even if you think the animal could have gone anywhere on earth. 
+The `make.grid` function assumes the animal is constrained to sea, but you can assume the animal is constrained to land by setting `mask = "land"` or not constrained to land or sea by setting `mask = "none"`.  
+You'll need to provide `make.grid` with the extents of longitude, `c(min.lon, max.lon)`, the extents of latitude `c(min.lat, max.lat)` and a `cell.size` in degrees also.  
+
+You can check your grid by calling `plot(grid)`
+
+
+
+```{r}
+grid <- makeGrid(c(45, 115), c(-65, -35), cell.size = 1, mask = "sea", pacific = T)  # Kerguelen
+plot(grid)
+```
+
+
+Now we have all the functions we need to fit a model, we'll load in some data and begin!
+
+### Load data and fit a model
+
+The data for this tutorial was recorded by a time-depth recorder attached to a southern elephant seal, and includes water pressure (depth) and temperature. These temperature data are *not* sea-surface temperature so they are not useful to us and we'll need to set them to NA so that the model doesn't try to incorporate them. Note that the columns are correctly named, with a column for `Date` and a column for `Light`, and `Date` is in the right format. A commented line has been added to show you an example of how to change `Date` to the correct format if provided in a different format.
+
+
+```{r load_data}
+tag <- "https://raw.githubusercontent.com/ABindoff/geolocationHMM/master/TDR86372ds.csv"
+d.lig <- read_delim(tag, delim = ",", skip = 0, 
+                    col_names = c("Date", "Light","Depth","Temp"))
+d.lig$Temp <- NA
+
+d.lig <- subset(d.lig,Date >= as.POSIXct("2009-10-28 00:00:01",tz = "UTC") &
+                  Date < as.POSIXct("2010-01-20 15:00:01",tz = "UTC")) 
+head(d.lig)
+lightImage(d.lig, offset = 5, zlim = c(0,130))
+```
+  
+The plot above shows the time series. The pixels represent the observed light, so white pixels are full daylight and black pixels are complete darkness. You can only just make out night in this plot because the seal spends so much time diving deeply, and the light sensor on this tag picks up moonlight quite easily.
+
+We select a zenith `zen <- 95` as a good starting point for finding a light threshold. We know (from GPS data in this case, but generally from field notes) that the tag was at 75.863, -47.841 on the 3rd of November 2009 so we give what we know to `calibrate` ad inspect the light traces.
+
+
+```{r calibrate95}
+zen <- 95
+day <- as.POSIXct("2009-11-03 00:00:00", "UTC")
+
+thresh <- calibrate(d.lig, day, 75.863, -47.841, zen)
+```
+
+The red line is the observed light trace. It's wiggly because the animal was diving regularly throughout the journey. The maximum light observed when the sun is below 95 degrees is indicated with a dashed line.  Does this look like a reasonable threshold to you?  Let's try again with a different zenith and see if the apparent threshold looks more informative.
+
+```{r calibrate97}
+zen <- 97
+
+thresh <- calibrate(d.lig, day, 75.863, -47.841, zen) * 1.10
+```
+
+There is a trade-off here - the model deals with observations of darkness during the day really well, but it can't deal with observations of light during the night. So if we set our light threshold too low, moonlight might be interpreted as daylight by the model and it will assume that the animal was somewhere else - some place where it is still day-time.  
+In this case (at this latitude), a zenith of 97 is a better "fit", but we've added 10% to the value returned by `calibrate` to bump up the light threshold a little to be on the safe side.  
+
+We know where the tag deployed and retrieved so we set `retrieved.at` and `deployed.at` accordingly a build our TwilightFree model.
+
+```{r build_model}
+
+retrieved.at <- deployed.at <- c(70.75, -49.25)
+
+
+# specify the model
+model <- TwilightFree(d.lig,
+                      alpha=c(1, 1/25),
+                      beta=c(1, 1/5),
+                      zenith = zen, threshold = thresh, 
+                      deployed.at = deployed.at,
+                      retrieved.at = retrieved.at)
+```
+
+
+Now the forward-backward algorithm has everything it needs to fit the model - a model and a grid. A 90 day track takes less than a minute on most computers, `epsilon1` and `epsilon2` tell the algorithm which cells to exclude from the algorithm at each step (these are the very low likelihood locations given the data).
+
+```{r fit}
+# fit the model using the forward-backward algorithm, SGAT::essie
+fit <- SGAT::essie(model,grid,epsilon1=1.0E-4, epsilon2 = 1E-6)
+```
+
+Let's have a look at the track - but first we need a function to turn the fitted object into a track, and another to plot it nicely.  
+`trip` takes the fitted object and returns a data frame with Date, Lon, Lat.  
+`drawTracks` takes the object returned from `trip` and plots it on a sensibly defined map.
+
+```{r}
+#  filtered GPS positions
+gps <- "https://raw.githubusercontent.com/ABindoff/geolocationHMM/master/86372_filteredGPS.csv"
+gdat <- read_csv(gps, skip = 0, 
+                   col_names = c("Date", "Lon","Lat"))
+head(gdat)
+drawTracks(trip(fit, type = "full"), gps = gdat, pacific = TRUE)
+```

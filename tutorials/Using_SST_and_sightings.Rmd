@@ -1,5 +1,5 @@
 ---
-title: "Sea surface temp and sightings at known locations"
+title: "Sea surface temp and known locations"
 author: "Bindoff, A., Foo, D."
 date: "12 December 2017"
 output:

@@ -5,19 +5,19 @@ library(readr)
 library(TwilightFree)
 library(maptools)
 
-load("sst_2014_2017.RData") ## `sst`
+load("tutorials/sst_2014_2017.RData") ## `sst`
 
-grid <- makeGrid(c(125, 145), c(-45,-30), cell.size = 1/2, mask = "sea", pacific = T)
+grid <- makeGrid(c(125, 145), c(-45,-30), cell.size = 1/4, mask = "sea", pacific = T)
 plot(grid)
 
 # light and temp data are often in separate files
-d.lig <- read.csv("nzfs.lig.csv")
+d.lig <- read.csv("https://raw.githubusercontent.com/ABindoff/TwilightFree/master/tutorials/nzfs.lig.csv")
 head(d.lig)
 # fix Date to %Y-%m-%d %H:%M:%S format
 d.lig$Date <- as.POSIXct(strptime(as.character(d.lig$Date), "%d/%m/%Y %H:%M", tz="GMT"))
 
 # read temp data
-d.tem <- read.csv("nzfs.tem.csv")
+d.tem <- read.csv("https://raw.githubusercontent.com/ABindoff/TwilightFree/master/tutorials/nzfs.tem.csv")
 d.tem$Date <- as.POSIXct(strptime(as.character(d.tem$Date), "%d/%m/%Y %H:%M", tz="GMT"))
 
 # align temp observations with light observations
@@ -29,7 +29,7 @@ lightImage(d.lig, offset = 5, zlim = c(0, 64))
 
 # chop the calibration and transit periods off the ends
 d.lig <- subset(d.lig,Date >= as.POSIXct("2017-01-27 00:00",tz = "GMT") &
-                  Date < as.POSIXct("2017-07-01 00:00",tz = "GMT"))
+                  Date < as.POSIXct("2017-04-21 00:00",tz = "GMT"))
 lightImage(d.lig, offset = 5, zlim = c(0,64))
 
 # find optimal threshold and solar zenith angles for tag using `calibrate`
@@ -39,9 +39,9 @@ thresh <- calibrate(d.lig, day, 137.22, -35.78, zen) *1.01
 
 # dates where animal returned to the colony were recorded in field notes
 # and recorded in this spreadsheet (but the Date column needs formatting)
-sightings <- read.csv("nzfs.fixed.csv")
-sightings$Date <- as.character(strptime(sightings$Date, format = "%d/%m/%Y"))
-
+sightings <- data.frame(Date = c("2017-01-28", "2017-02-11", "2017-02-28", "2017-03-15", "2017-03-20", "2017-04-19"),
+                        Lon = 137.5,
+                        Lat = -36.1)
 
 model <- TwilightFree(d.lig,
                       alpha=c(1, 1/5),

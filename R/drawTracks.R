@@ -1,5 +1,5 @@
 #' Plot tracks with map
-#' @param trip a trip object returned from `trip()`
+#' @param gls a trip object returned from `trip()` with `Lon` and `Lat` columns in time order at minimum
 #' @param gps optional data.frame of reference data with `Lon` and `Lat` columns in time order
 #' @param col line colour for trip
 #' @param gps.col line colour for gps

@@ -88,13 +88,13 @@ TwilightFree <- function(df,
     n <- nrow(x)
     logl <- double(n)
 
-    ss <- solar(slices[[k]]$Date)
+    ss <- SGAT::solar(slices[[k]]$Date)
     obsDay <- (slices[[k]]$Light) >= threshold
 
     ## Loop over location
     for (i in seq_len(n)) {
       ## Compute for each x the time series of zeniths
-      expDay <- zenith(ss, x[i, 1], x[i, 2]) <= zenith
+      expDay <- SGAT::zenith(ss, x[i, 1], x[i, 2]) <= zenith
 
       ## comparison to the observed light -> is L=0 (ie logl=-Inf)
       if (any(obsDay & !expDay)) {
@@ -110,7 +110,7 @@ TwilightFree <- function(df,
 
   ## Behavioural (movement) contribution to the log posterior
   logbk <- function(k, x1, x2) {
-    spd <- pmax.int(gcDist(x1, x2), 1e-06) / dt[k]
+    spd <- pmax.int(SGAT::gcDist(x1, x2), 1e-06) / dt[k]
     dgamma(spd, beta[1L], beta[2L], log = TRUE)
   }
   list(

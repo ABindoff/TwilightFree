@@ -5,7 +5,7 @@ library(readr)
 library(TwilightFree)
 library(maptools)
 
-load("tutorials/sst_2014_2017.RData") ## `sst`
+load("tutorials/sst_2014_2017.RData") ## `sst`  download from https://github.com/ABindoff/TwilightFree/blob/master/tutorials/sst_2014_2017.RData
 
 grid <- makeGrid(c(125, 145), c(-45,-30), cell.size = 1/4, mask = "sea", pacific = T)
 plot(grid)

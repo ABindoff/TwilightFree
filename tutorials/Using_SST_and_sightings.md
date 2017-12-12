@@ -15,17 +15,19 @@ library(TwilightFree)
 library(maptools)
 ```
 
-For marine animals who traverse large distances across the latitudes, sea surface temperature (SST) data collected by many GLS tags can improve location estimates. `TwilightFree` is able to use this information, but there are some common issues that users face which we aim to address in this tutorial.
+For marine animals who traverse large distances across the latitudes, sea surface temperature (SST) data which are collected by most GLS tags can be used to improve location estimates. `TwilightFree` is able to use this information, but there are some common issues that users face which we aim to address in this tutorial.
 
-This tutorial also demonstrates one of two methods for incorporating data about fixes at known locations, either from physical sightings, or known beaching, burrowing, or nesting locations and dates.
+This tutorial also demonstrates one of two methods for incorporating data about fixes at known locations, either from physical sightings, or known beaching, burrowing, or nesting locations and dates. These are sometimes evident from patterns in the light data, and can be confirmed by position estimates from an initial run that go close to the beach, burrow, or nest.
 
-If you have not forked this repository from github, please download the SST data at <https://github.com/ABindoff/TwilightFree/blob/master/tutorials/sst_2014_2017.RData> This `rasterStack` covers the years 2014-2017 and was obtained [from NOAA](https://www.esrl.noaa.gov/psd/repository/entry/show?entryid=12159560-ab82-48a1-b3e4-88ace20475cd). If you require data that is older or newer, download the file from NOAA and use `sst <- stack("C:/Reynolds/sst.wkmean.1990-present.nc",varname="sst",quick=TRUE)` to load it as a `raster::rasterStack` object.
+If you have *not* forked this repository from github, please download the SST data at <https://github.com/ABindoff/TwilightFree/blob/master/tutorials/sst_2014_2017.RData> (forking the repository avoids this step). This `rasterStack` covers mean weekly SST for the the years 2014-2017 and was obtained [from NOAA](https://www.esrl.noaa.gov/psd/repository/entry/show?entryid=12159560-ab82-48a1-b3e4-88ace20475cd). If you require data that is older or newer, download the file from NOAA and use `sst <- stack("C:/Reynolds/sst.wkmean.1990-present.nc",varname="sst",quick=TRUE)` to load it as a `raster::rasterStack` object.
 
 ``` r
 load("../tutorials/sst_2014_2017.RData") ## `sst`  download from https://github.com/ABindoff/TwilightFree/blob/master/tutorials/sst_2014_2017.RData
 ```
 
-Define the extent of the grid. We know that this animal (a New Zealand fur seal) was tagged at Kangaroo Island, South Australia, and hasn't ranged far. `makeGrid` takes lon and lat extents, a cell size (in degrees), and optionally an argument to define a land/sea mask. `pacific = T` tells `makeGrid` that we wish to use Pacific-centered coordinates.
+#### Define the extent of the grid
+
+We know that this animal (a New Zealand fur seal) was tagged at Kangaroo Island, South Australia, and hasn't ranged far. `makeGrid` takes lon and lat extents, a cell size (in degrees), and optionally an argument to define a land/sea mask. `pacific = T` tells `makeGrid` that we wish to use Pacific-centered coordinates.
 
 ``` r
 grid <- makeGrid(c(125, 145), c(-45,-30), cell.size = 1/4, pacific = T)
@@ -33,6 +35,8 @@ plot(grid)
 ```
 
 ![](Using_SST_and_sightings_files/figure-markdown_github/unnamed-chunk-2-1.png)
+
+#### Load light and SST data
 
 Light and SST data are typically stored in separate files (to save storage space on the tag) and need to be merged. *(The `BAStag` package offers tools that make this easy for BAS tags).*
 
@@ -96,6 +100,8 @@ lightImage(d.lig, offset = 5, zlim = c(0,64))
 
 ![](Using_SST_and_sightings_files/figure-markdown_github/unnamed-chunk-5-1.png)
 
+#### Threshold and solar zenith angle
+
 Use `calibrate` to determine the threshold and solar zenith angle used in the model.
 
 ``` r
@@ -109,7 +115,9 @@ thresh <- calibrate(d.lig, day, 137.22, -35.78, zen) *1.01
 
     ## [1] "max light in night window: 12.491 assuming a solar zenith angle of: 96"
 
-We have a small list of dates where the animal returned to the colony. This includes the deployment and retrieval dates. Normally this might be a .csv or .txt file, we just need `Date`, `Lon`, and `Lat` columns in a data frame. We pass these to the `fixd` argument in `TwilightFree`. We also pass `sst`, `zenith`, `threshold`, and the hyperparameters relating to sensor obscuration (`alpha`) and movement (`beta`).
+#### Fixes
+
+We have a small list of dates where the animal returned to the colony. This includes the deployment and retrieval dates. Normally this might be a .csv or .txt file, we just need `Date`, `Lon`, and `Lat` columns in a data frame. We pass these to the `fixd` argument in `TwilightFree`. We also pass `sst`, `zenith`, `threshold`, and the hyperparameters relating to sensor obscuration (`alpha`) and movement (`beta`). We may not specify `deployed.at` or `retrieved.at` parameters if we supply `fixd`.
 
 ``` r
 # dates where animal returned to the colony were recorded in field notes
@@ -126,7 +134,7 @@ model <- TwilightFree(d.lig,
                       sst = sst) # this is the sst raster stack
 ```
 
-Pass the `TwilightFree` model object to `SGAT::essie` which implements a forward-backward algorithm to calculate the posterior.
+Pass the `TwilightFree` model object to `SGAT::essie` which calculates the posterior with a forward-backward algorithm.
 
 ``` r
 # fit the model using the grid from `makeGrid`
@@ -143,7 +151,9 @@ drawTracks(locs, pacific = T)
 
 ![](Using_SST_and_sightings_files/figure-markdown_github/unnamed-chunk-9-1.png)
 
-An optional step is to smooth the track using a state-space model such as `bsam`. You will need to install `jags` in order to use `bsam`, so this chunk is not evaluated by default (set `eval = T` to run it). The "trick" is to tell `bsam` that the GLS locations estimated using `TwilightFree` method are Argos locations that need smoothing.
+An optional step is to smooth the track using a state-space model such as `bsam`. You will need to install `jags` (on your computer, not in R) in order to use `bsam`, so this chunk is not evaluated by default (set `eval = T` and install jags and `bsam` to knit it).
+
+The "trick" is to tell `bsam` that the GLS locations estimated using `TwilightFree` method are Argos locations that need smoothing.
 
 ``` r
 # smooth using a state space model
@@ -181,7 +191,7 @@ fit <- fit_ssm(d, model = "DCRW", tstep = 1, adapt = 5000, samples = 5000,
     ## NOTE: Stopping adaptation
     ## 
     ## 
-    ## Elapsed time:  0.51 min
+    ## Elapsed time:  0.53 min
 
 ``` r
 # diag_ssm(fit)

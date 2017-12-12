@@ -15,7 +15,8 @@ Known bugs:
 `# install.packages("devtools")`  
 `# install.packages("raster", repos = "https://cran.csiro.au/")`  
 `devtools::install_github("SWotherspoon/SGAT")`  
-`devtools::install_github("SWotherspoon/BAStag")` 
+`devtools::install_github("SWotherspoon/BAStag")`  
 `devtools::install_github("ABindoff/TwilightFree")`  
+
 
 

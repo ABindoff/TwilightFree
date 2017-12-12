@@ -12,7 +12,7 @@ Known bugs:
 
 ### Installation:  
 
-`# install.packages("devtools")` 
+`# install.packages("devtools")`  
 `# install.packages("raster", repos = "https://cran.csiro.au/")`  
 `devtools::install_github("SWotherspoon/SGAT")`  
 `devtools::install_github("SWotherspoon/BAStag")` 

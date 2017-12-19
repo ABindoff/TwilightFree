@@ -12,9 +12,11 @@ Known bugs:
 
 ### Installation:  
 
-`# install.packages("devtools")` 
+`# install.packages("devtools")`  
 `# install.packages("raster", repos = "https://cran.csiro.au/")`  
-`install_github("ABindoff/TwilightFree")`  
-`install_github("SWotherspoon/SGAT")`  
-`install_github("SWotherspoon/BAStag")`  
+`devtools::install_github("SWotherspoon/SGAT")`  
+`devtools::install_github("SWotherspoon/BAStag")`  
+`devtools::install_github("ABindoff/TwilightFree")`  
+
+
 

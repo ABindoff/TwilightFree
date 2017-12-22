@@ -18,5 +18,12 @@ Known bugs:
 `devtools::install_github("SWotherspoon/BAStag")`  
 `devtools::install_github("ABindoff/TwilightFree")`  
 
+Linux users (tested Ubuntu 17.10 Artful) may also need to install the following (from a terminal) in order to install `devtools` and `ncdf4` package:  
+sudo apt-get install libssl-dev  
+sudo apt-get install libcurl4-openssl-dev  
 
+sudo apt-get install netcdf-bin  
+sudo apt-get install libnetcdf-dev  
+sudo apt-get install udunits-bin  
+sudo apt-get install libudunits2-dev  
 

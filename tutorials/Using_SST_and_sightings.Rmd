@@ -33,6 +33,10 @@ If you have *not* forked this repository from github, please download the SST da
 
 ```{r}
 load("../tutorials/sst_2014_2017.RData") ## `sst`  download from https://github.com/ABindoff/TwilightFree/blob/master/tutorials/sst_2014_2017.RData
+
+
+# #Linux users (tested ubuntu 17.10, with repository cloned to Home directory)  
+# load("~/TwilightFree/tutorials/sst_2014_2017.RData")
 ```
 
 #### Define the extent of the grid

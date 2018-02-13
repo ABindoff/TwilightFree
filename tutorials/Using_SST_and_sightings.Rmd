@@ -96,6 +96,24 @@ day <- as.POSIXct("2017-01-28 00:00", "GMT")
 thresh <- calibrate(d.lig, day, 137.22, -35.78, zen) *1.01
 ```
 
+#### Check threshold
+
+The TwilightFree method will return errors if light observations appear when it should be night. `thresholdPlot` makes it easier to spot these problems in advance.  
+
+
+```{r}
+thresholdPlot(d.lig, threshold = thresh)
+```
+
+For contrast, we make a `thresholdPlot` with a threshold set deliberately too low for this tag. The single red pixel towards the end of March would cause the method to fail if this threshold was used.  
+
+
+```{r}
+thresholdPlot(d.lig, threshold = 6)
+
+```
+
+
 #### Fixes
 
 We have a small list of dates where the animal returned to the colony. This includes the deployment and retrieval dates. Normally this might be a .csv or .txt file, we just need `Date`, `Lon`, and `Lat` columns in a data frame. We pass these to the `fixd` argument in `TwilightFree`. We also pass `sst`, `zenith`, `threshold`, and the hyperparameters relating to sensor obscuration (`alpha`) and movement (`beta`). We may not specify `deployed.at` or `retrieved.at` parameters if we supply `fixd`.  

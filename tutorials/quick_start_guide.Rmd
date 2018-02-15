@@ -58,6 +58,8 @@ You can check your grid by calling `plot(grid)`
 
 ```{r}
 grid <- makeGrid(c(45, 115), c(-65, -35), cell.size = 1, mask = "sea", pacific = T)  # Kerguelen
+grid[!grid] <- 1E-10  ## this makes on-land locations very unlikely but not impossible
+
 plot(grid)
 ```
 

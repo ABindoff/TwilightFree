@@ -8,6 +8,11 @@
 thresholdPlot <- function(x, threshold = 5, offset = 0){
    x$y = 0
    x$y[x$Light >= threshold] = 1
+   for(i in 3:nrow(x)){
+     if(x$y[i] != x$y[i-1]){
+       x$y[i-c(1,2)] = 0.5
+     }
+   }
    x$Light <- x$y
-   lightImage(x, offset = offset, zlim = c(0,1), col = c("grey20", "red"))
+   lightImage(x, offset = offset, zlim = c(0,1), col = c("grey20", "red", "grey90"))
 }

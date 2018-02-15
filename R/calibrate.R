@@ -10,6 +10,9 @@
 #' @importFrom SGAT zenithSimulate
 #' @return threshold value for TwilightFree model
 calibrate <- function(df, day, lon, lat, zenith = 96, offset = 0, verbose = T){
+  if(max(df$Light) > 64){
+    print("It looks like your data may not be in BAS tag format. You may need to log-transform before determining a threshold.")
+  }
   day <- day + offset*60*60
   single.day <- subset(df, df$Date >= as.POSIXct(day, tz = "GMT") & df$Date < as.POSIXct(day+24*60*60, tz = "GMT"))
 
@@ -35,3 +38,5 @@ calibrate <- function(df, day, lon, lat, zenith = 96, offset = 0, verbose = T){
   return(thresh)
 
 }
+
+

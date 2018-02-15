@@ -1,4 +1,4 @@
-Sea surface temp and sightings at known locations
+Sea surface temp and known locations
 ================
 Bindoff, A., Foo, D.
 12 December 2017
@@ -23,6 +23,10 @@ If you have *not* forked this repository from github, please download the SST da
 
 ``` r
 load("../tutorials/sst_2014_2017.RData") ## `sst`  download from https://github.com/ABindoff/TwilightFree/blob/master/tutorials/sst_2014_2017.RData
+
+
+# #Linux users (tested ubuntu 17.10, with repository cloned to Home directory)  
+# load("~/TwilightFree/tutorials/sst_2014_2017.RData")
 ```
 
 #### Define the extent of the grid
@@ -31,6 +35,7 @@ We know that this animal (a New Zealand fur seal) was tagged at Kangaroo Island,
 
 ``` r
 grid <- makeGrid(c(125, 145), c(-45,-30), cell.size = 1/4, pacific = T)
+grid[!grid] <- 1E-10
 plot(grid)
 ```
 
@@ -115,6 +120,24 @@ thresh <- calibrate(d.lig, day, 137.22, -35.78, zen) *1.01
 
     ## [1] "max light in night window: 12.491 assuming a solar zenith angle of: 96"
 
+#### Check threshold
+
+The TwilightFree method will return errors if light observations appear when it should be night. `thresholdPlot` makes it easier to spot these problems in advance.
+
+``` r
+thresholdPlot(d.lig, threshold = thresh)
+```
+
+![](Using_SST_and_sightings_files/figure-markdown_github/unnamed-chunk-7-1.png)
+
+For contrast, we make a `thresholdPlot` with a threshold set deliberately too low for this tag. The single red pixel towards the end of March would cause the method to fail if this threshold was used.
+
+``` r
+thresholdPlot(d.lig, threshold = 6)
+```
+
+![](Using_SST_and_sightings_files/figure-markdown_github/unnamed-chunk-8-1.png)
+
 #### Fixes
 
 We have a small list of dates where the animal returned to the colony. This includes the deployment and retrieval dates. Normally this might be a .csv or .txt file, we just need `Date`, `Lon`, and `Lat` columns in a data frame. We pass these to the `fixd` argument in `TwilightFree`. We also pass `sst`, `zenith`, `threshold`, and the hyperparameters relating to sensor obscuration (`alpha`) and movement (`beta`). We may not specify `deployed.at` or `retrieved.at` parameters if we supply `fixd`.
@@ -149,7 +172,7 @@ locs <- trip(fit)
 drawTracks(locs, pacific = T)
 ```
 
-![](Using_SST_and_sightings_files/figure-markdown_github/unnamed-chunk-9-1.png)
+![](Using_SST_and_sightings_files/figure-markdown_github/unnamed-chunk-11-1.png)
 
 An optional step is to smooth the track using a state-space model such as `bsam`. You will need to install `jags` (on your computer, not in R) in order to use `bsam`, so this chunk is not evaluated by default (set `eval = T` and install jags and `bsam` to knit it).
 
@@ -171,29 +194,7 @@ colnames(d) <- c("id", "date","lc",  "lon", "lat" , "lonerr", "laterr")
 
 fit <- fit_ssm(d, model = "DCRW", tstep = 1, adapt = 5000, samples = 5000,
                thin = 5, span = 0.2)
-```
 
-    ## Compiling data graph
-    ##    Resolving undeclared variables
-    ##    Allocating nodes
-    ##    Initializing
-    ##    Reading data back into data table
-    ## Compiling model graph
-    ##    Resolving undeclared variables
-    ##    Allocating nodes
-    ## Graph information:
-    ##    Observed stochastic nodes: 162
-    ##    Unobserved stochastic nodes: 86
-    ##    Total graph size: 1648
-    ## 
-    ## Initializing model
-    ## 
-    ## NOTE: Stopping adaptation
-    ## 
-    ## 
-    ## Elapsed time:  0.53 min
-
-``` r
 # diag_ssm(fit)
 # plot_fit(fit)
 result <- get_summary(fit)
@@ -201,5 +202,3 @@ result$Lon <- result$lon
 result$Lat <- result$lat
 drawTracks(result, pacific = T)
 ```
-
-![](Using_SST_and_sightings_files/figure-markdown_github/unnamed-chunk-10-1.png)

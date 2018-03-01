@@ -2,13 +2,16 @@
 
 A new method of geolocation using GLS tag (ambient light) data. TwilightFree has no explicit dependence on being able to estimate or identify the time of twilight, making it very robust to noise (sensor shading or obscuration) in the light data. It uses SST, plausible movement, land/sea masks, and fixes at known locations to improve position estimates.
 
-Please cite:
+Please cite (and read in full):
 Bindoff AD, Wotherspoon SJ, Guinet C, Hindell MA. Twilight-free geolocation from noisy light data. *Methods Ecol Evol.* 2017;00:1–9. https://doi.org/10.1111/2041-210X.12953  
 
-Known bugs:  
+Known issues:  
 - the default track using `trip(fit, type = "full")` returns the maximum *a posteori* estimate (MAP estimate) for each day. If possible locations straddle the equator, sometimes the MAP estimate for a particularly day is obviously in the wrong hemisphere (the algorithm picks a mathematically plausible but ecologically implausible solution). Calling `essieRaster(fit)` and finding the MAP estimate for the appropriate hemisphere is a useful solution, but a simpler solution is currently in development.  
 - you may need to run `install.packages("raster", repos = "https://cran.csiro.au/")` before you can load TwilightFree or SGAT. If you already have `raster` installed, you may need to run `remove.packages("raster")` first and re-install it from the repo at CSIRO. It's one of the great mysteries.  
-- if a location cannot be determined on a day, `trip` will fail. This prevents as mismatch between locations and days. `SGAT:essie` will also throw warnings.  
+- if a location cannot be determined on one or more days, `trip` will fail. This prevents a mismatch between locations and days. `SGAT:essie` will also throw warnings as a subtle hint that something went wrong.  
+- it is **essential** that non-solar light sources are dealt with prior to estimating locations. This is the "Achille's heel" of the `TWilightFree` method. Always check using the `thresholdPlot` function, and adjust thresholds or remove outliers using `eraseLight`. Non-solar light sources may include unusually bright moons, city, ship, car, lighthouse, or factory lights.  
+
+Please use the Issues tab of this git repo to search and report issues or difficulties. This method cannot estimate the impossible, but it rarely fails completely.  
 
 
 ### Installation:  

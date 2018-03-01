@@ -25,7 +25,7 @@ TwilightFree <- function(df,
                          retrieved.at = F,
                          fixd = NULL,
                          sst = NULL){
-  if(is.null(df$Temp)){
+  if(is.null(df$Temp)){ ## fix bug, needs a $Temp column even if it's NA
     df$Temp <- NA
     }
   # Define segment by date

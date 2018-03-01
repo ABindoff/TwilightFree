@@ -25,6 +25,9 @@ TwilightFree <- function(df,
                          retrieved.at = F,
                          fixd = NULL,
                          sst = NULL){
+  if(is.null(df$Temp)){
+    df$Temp <- NA
+    }
   # Define segment by date
   seg <- floor((as.numeric(df$Date)- as.numeric(min(df$Date)))/(24*60*60))
   # Split into `slices`

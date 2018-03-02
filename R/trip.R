@@ -5,7 +5,13 @@
 #' @importFrom SGAT essieMode
 #' @return matrix with columns named `Date`, `Lon`, `Lat`
 trip <- function(fit, type = c("full", "forward", "backward")){
-  trip <- data.frame(as.POSIXct(strptime(essieMode(fit)$time, "%Y-%m-%d")), essieMode(fit, type = type)$x)
-  names(trip) <- c("Date", "Lon", "Lat")
+  time <- essieMode(fit)$time
+  x <- essieMode(fit, type = type)$x
+  z <- unlist(lapply(fit$lattice, function(x) length(which.max(x$ps)) != 0))  ## find inestimable locations
+  time <- time[z]  ## removes missing days because z == F when max(x$ps) could not be calculated
+    trip <- data.frame(Date = time, Lon = x[,1], Lat = x[,2])
+      if(any(!z)){
+        warning("\nDay ", which(!z), " missing, could not estimate location.\n\n", immediate. = T)
+        }
   return(trip)
 }

@@ -94,7 +94,7 @@ Use `calibrate` to determine the threshold and solar zenith angle used in the mo
 # find optimal threshold and solar zenith angles for tag using `calibrate`
 zen <- 96
 day <- as.POSIXct("2017-01-28 00:00", "GMT")
-thresh <- calibrate(d.lig, day, 137.22, -35.78, zen) *1.01
+thresh <- calibrate(d.lig, day, 137.22, -35.78, zen)
 ```
 
 #### Check threshold
@@ -106,7 +106,7 @@ The TwilightFree method will return errors if light observations appear when it 
 thresholdPlot(d.lig, threshold = thresh)
 ```
 
-For contrast, we make a `thresholdPlot` with a threshold set deliberately too low for this tag. The single red pixel towards the end of March would cause the method to fail if this threshold was used.  
+For contrast, we make a `thresholdPlot` with a threshold set deliberately too low for this tag. The single red pixel towards the end of March would cause the method to fail if this threshold was used. It would be reasonable to use `eraseLight` to "erase" this non-solar light source, but we omit this step, opting to use a slightly higher threshold instead.  
 
 
 ```{r}

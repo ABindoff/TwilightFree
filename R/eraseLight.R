@@ -12,7 +12,7 @@
 #' @return data frame with edited Light data
 
 eraseLight <- function(obs, zlim = c(0, 64), offset = 0, threshold = 5){
-  ts <- thresholdPlot(obs, offset = offset, zlim = zlim, threshold = threshold)
+  ts <- thresholdPlot(obs, offset = offset, threshold = threshold)
   light.pol <- tsimageLocator(ts, n=2)
   lp.index <- .bincode(light.pol, sort(obs$Date), right = T)
   for(i in lp.index[1]:lp.index[2]){
@@ -23,6 +23,6 @@ eraseLight <- function(obs, zlim = c(0, 64), offset = 0, threshold = 5){
       obs$Light[i] <- 0
     }
   }
-  thresholdPlot(obs, offset = offset, zlim = zlim, threshold = threshold)
+  thresholdPlot(obs, offset = offset, threshold = threshold)
   return(obs)
 }

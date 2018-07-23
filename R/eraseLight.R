@@ -11,7 +11,7 @@
 #' @importFrom BAStag tsimageLocator
 #' @return data frame with edited Light data
 
-eraseLight <- function(obs, zlim = c(0, 64), offset = 0, threshold = 5){
+eraseLight <- function(obs, offset = 0, threshold = 5){
   ts <- thresholdPlot(obs, offset = offset, threshold = threshold)
   light.pol <- tsimageLocator(ts, n=2)
   lp.index <- .bincode(light.pol, sort(obs$Date), right = T)

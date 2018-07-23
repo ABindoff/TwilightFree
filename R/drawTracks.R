@@ -10,14 +10,13 @@
 #' @import maptools
 #' @import polyclip
 #' @import raster
-#' @importFrom grDevices colorRampPalette
+#' @importFrom viridisLite viridis
 #' @importFrom graphics abline par points
 #' @importFrom utils data
 drawTracks <- function(gls,
                        gps = NULL,
-                       col = "firebrick",
-                       gps.col = "dodgerblue",
-                       point.cols = c("red","springgreen","royalblue"),
+                       point.cols = TRUE,
+                       line.col = "grey60"
                        main = "",
                        pacific = F){
   xlm <- range(c(gls$Lon, gps$Lon))
@@ -27,20 +26,23 @@ drawTracks <- function(gls,
   if(pacific){
     wrld_simpl <- nowrapRecenter(wrld_simpl, avoidGEOS = TRUE)}
   plot(wrld_simpl,xlim=xlm,ylim=ylm,
-            col="grey90",border="grey80", main = main, axes = T)
+       col="grey90",border="grey80", main = main, axes = T)
   xlm <- par()$usr[1:2]
   ylm <- par()$usr[3:4]
   border <- cbind(c(xlm[1], xlm[2], xlm[2], xlm[1], xlm[1]),
                   c(ylm[1], ylm[1], ylm[2], ylm[2], ylm[1]))
   lines(border, col = "black")
 
-  if(!is.null(point.cols)){
-    colfunc <- colorRampPalette(point.cols)
-    points(cbind(jitter(gls$Lon), jitter(gls$Lat)), col = colfunc(nrow(trip)))}
+  if(point.cols){
+    points(cbind(jitter(gls$Lon), jitter(gls$Lat)), col = viridisLite::viridis(nrow(gls), end = 0.95))}
 
   if(!is.null(gps)){
-    lines(cbind(gps$Lon, gps$Lat), col = gps.col)}
+    d <- nrow(gls)
+    for (i in c(seq(d, nrow(gps), by = d),nrow(gps))){
+      lines(cbind(gps$Lon[(i-d+1):i], gps$Lat[(i-d+1):i]), col = viridisLite::viridis(nrow(gps)/d, end = 0.95)[i/d])
+    }}
 
-  lines(cbind(gls$Lon, gls$Lat), col = col)
+  lines(cbind(gls$Lon, gls$Lat), col = line.col)
 
 }
+

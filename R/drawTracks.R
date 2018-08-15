@@ -16,7 +16,7 @@
 drawTracks <- function(gls,
                        gps = NULL,
                        point.cols = TRUE,
-                       line.col = "grey60"
+                       line.col = "grey60",
                        main = "",
                        pacific = F){
   xlm <- range(c(gls$Lon, gps$Lon))

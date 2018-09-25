@@ -4,24 +4,23 @@
 \alias{drawTracks}
 \title{Plot tracks with map}
 \usage{
-drawTracks(gls, gps = NULL, col = "firebrick", gps.col = "dodgerblue",
-  point.cols = c("red", "springgreen", "royalblue"), main = "",
-  pacific = F)
+drawTracks(gls, gps = NULL, point.cols = TRUE, line.col = "grey60",
+  main = "", pacific = F)
 }
 \arguments{
 \item{gls}{a trip object returned from `trip()` with `Lon` and `Lat` columns in time order at minimum}
 
 \item{gps}{optional data.frame of reference data with `Lon` and `Lat` columns in time order}
 
-\item{col}{line colour for trip}
-
-\item{gps.col}{line colour for gps}
-
 \item{point.cols}{optional gradient colours for points, NULL if points not required}
 
 \item{main}{optional title}
 
 \item{pacific}{TRUE if map uses Pacific-centred co-ordinates}
+
+\item{col}{line colour for trip}
+
+\item{gps.col}{line colour for gps}
 }
 \description{
 Plot tracks with map

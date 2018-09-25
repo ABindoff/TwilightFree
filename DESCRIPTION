@@ -8,7 +8,7 @@ Description: Geolocation using ambient light data from GLS tags. Robust to subst
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.1.0
 Imports: SGAT,
     maptools,
     polyclip,

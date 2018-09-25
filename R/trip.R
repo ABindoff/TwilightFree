@@ -11,7 +11,7 @@ trip <- function(fit, type = c("full", "forward", "backward")){
   time <- time[z]  ## removes missing days because z == F when max(x$ps) could not be calculated
     trip <- data.frame(Date = time, Lon = x[,1], Lat = x[,2])
       if(any(!z)){
-        warning("\nDay ", which(!z), " missing, could not estimate location.\n\n", immediate. = T)
+        warning("\nDay ", list(which(!z)), " missing, could not estimate location.\n\n", immediate. = T)
         }
   return(trip)
 }

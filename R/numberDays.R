@@ -9,7 +9,7 @@ numberDays <- function(obs){
     warning("Data frame requires Date column\n")
     return(obs)
   }
-  obs$Day_num <- as.integer((obs$Date - obs$Date[1]) / (24 * 60 * 60))+1L
+  obs$Day_num <- as.integer((obs$Date - obs$Date[1]) / (24 * 60 * 60))
   return(obs)
 }
 

@@ -4,7 +4,7 @@
 \alias{missingPlot}
 \title{Remove days from data where no locations could be estimated from fitted TwilightFree object}
 \usage{
-missingPlot(x, fit, threshold = 5, fixd = NULL, offset = 0)
+missingPlot(x, fit = NULL, threshold = 5, fixd = NULL, offset = 0)
 }
 \arguments{
 \item{x}{data frame with Light, Date, and Day_num columns at minimum}

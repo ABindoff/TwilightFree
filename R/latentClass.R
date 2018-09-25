@@ -3,6 +3,7 @@
 #' @param d data frame with Light, Date, delta columns at minimum
 #' @export
 #' @importFrom mclust Mclust
+#' @importFrom magrittr %>%
 #' @import dplyr
 #' @return data frame with predicted day and night states in `state` column
 latentClass <- function(d, nstates = 3L, verbose = TRUE){

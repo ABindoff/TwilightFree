@@ -1,4 +1,4 @@
-
+require(dplyr)
 find_moon <- function(d, n = 6, q = 0.25, full = TRUE){
   if (is.null(d$Light) |
       is.null(d$Day_num)) {

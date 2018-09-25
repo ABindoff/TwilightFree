@@ -7,6 +7,7 @@
 #' @param smooth.light observations to smooth Light over
 #' @export
 #' @importFrom lubridate floor_date
+#' @importFrom magrittr %>%
 #' @importFrom dplyr filter
 #' @return data frame with smoothed Light and `delta` column of derivatives
 max_light_delta <- function(d,

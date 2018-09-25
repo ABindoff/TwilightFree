@@ -10,6 +10,7 @@
 #' @export
 #' @importFrom lubridate floor_date
 #' @import dplyr
+#' @importFrom magrittr %>%
 #' @return data frame of dates and location to use in `fixd` argument of `TwilightFree`
 findColony <- function(obs, threshold, colony, q = 0.9){
   if(is.null(obs$Date)){

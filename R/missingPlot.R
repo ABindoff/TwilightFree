@@ -9,7 +9,7 @@
 #' @importFrom BAStag lightImage
 #' @importFrom viridisLite viridis
 #' @return ts plot
-missingPlot <- function(x, fit, threshold = 5, fixd = NULL, offset = 0){
+missingPlot <- function(x, fit = NULL, threshold = 5, fixd = NULL, offset = 0){
   x$y = 0
   x$y[x$Light >= threshold] = 0.7
   for(i in 3:nrow(x)){
@@ -18,7 +18,11 @@ missingPlot <- function(x, fit, threshold = 5, fixd = NULL, offset = 0){
     }
   }
   x$Light <- x$y
-  x$Light[x$Day_num %in% findMissing(fit)] <- x$Light[x$Day_num %in% findMissing(fit)] + 0.2
+
+  if(!is.null(fit)){
+    x$Light[x$Day_num %in% findMissing(fit)] <- x$Light[x$Day_num %in% findMissing(fit)] + 0.2
+  }
+
   if(!is.null(fixd)){
     x$Light[floor_date(as_date(x$Date), "1 days") %in% as_date(fixd$Date)] <- x$Light[floor_date(as_date(x$Date), "1 days") %in% as_date(fixd$Date)] + 0.1
   }

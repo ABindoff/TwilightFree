@@ -12,7 +12,7 @@ eraseMoon <- function(d, return.model = FALSE , model = NULL, threshold = 0){
   N <- floor(0.6*max(d$Day_num, na.rm = TRUE))
   keep <- sample(1:nrow(d), N, replace = FALSE)
   if(is.null(model)){
-    model <- e1071::svm(factor(state) ~ hms + Light, d[d$Day_num %in% keep,])
+    model <- e1071::svm(factor(state) ~ hms + Light, d[keep,])
   }
   d$state <- predict(model, d)
   d$Light[d$state == "night"] <- threshold

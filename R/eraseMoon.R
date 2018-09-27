@@ -9,7 +9,7 @@
 #' @return data frame with predicted night and day states in `state` column
 eraseMoon <- function(d, return.model = FALSE , model = NULL, threshold = 0){
   d$hms <- hour(ymd_hms(d$Date))*60 + minute(ymd_hms(d$Date))
-  N <- floor(0.6*max(d$Day_num, na.rm = TRUE))
+  N <- floor(0.6*max(nrow(d)))
   keep <- sample(1:nrow(d), N, replace = FALSE)
   if(is.null(model)){
     model <- e1071::svm(factor(state) ~ hms + Light, d[keep,])

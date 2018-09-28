@@ -7,7 +7,6 @@
 #' @param offset time in hours to offset start of day time, defaults to 0
 #' @param verbose will plot light traces if TRUE
 #' @export
-#' @importFrom SGAT zenithSimulate
 #' @return threshold value for TwilightFree model
 calibrate <- function(df, day, lon, lat, zenith = 96, offset = 0, verbose = T){
   if(max(df$Light, na.rm = TRUE) > 64){
@@ -17,7 +16,7 @@ calibrate <- function(df, day, lon, lat, zenith = 96, offset = 0, verbose = T){
   day <- day + offset*60*60
   single.day <- subset(df, df$Date >= as.POSIXct(day, tz = "GMT") & df$Date < as.POSIXct(day+24*60*60, tz = "GMT"))
 
-  d.sim <- zenithSimulate(single.day$Date,
+  d.sim <- SGAT::zenithSimulate(single.day$Date,
                           lon = rep(lon, length(single.day$Date)),
                           lat = rep(lat, length(single.day$Date)),
                           single.day$Date)

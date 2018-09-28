@@ -9,7 +9,6 @@
 #' @param q proportion of Light observations below threshold (between [0, 1])
 #' @export
 #' @importFrom lubridate floor_date
-#' @import dplyr
 #' @importFrom magrittr %>%
 #' @return data frame of dates and location to use in `fixd` argument of `TwilightFree`
 findColony <- function(obs, threshold, colony, q = 0.9){

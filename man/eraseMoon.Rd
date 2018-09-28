@@ -4,7 +4,7 @@
 \alias{eraseMoon}
 \title{Remove days from data where no locations could be estimated from fitted TwilightFree object}
 \usage{
-eraseMoon(d, return.model = FALSE, model = NULL, q = 0.25)
+eraseMoon(d, return.model = FALSE, model = NULL, threshold = 0)
 }
 \arguments{
 \item{d}{data frame with Light, Date, Day_num, and state columns at minimum}
@@ -13,7 +13,7 @@ eraseMoon(d, return.model = FALSE, model = NULL, q = 0.25)
 
 \item{model}{a previously fitted predictive model}
 
-\item{q}{number between 0 and 1 which controls sensitivity}
+\item{threshold}{numeric Light intensity at twilight}
 }
 \value{
 data frame with predicted night and day states in `state` column

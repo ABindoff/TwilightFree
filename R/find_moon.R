@@ -1,4 +1,3 @@
-require(dplyr)
 find_moon <- function(d, n = 6, q = 0.25, full = TRUE){
   if (is.null(d$Light) |
       is.null(d$Day_num)) {
@@ -9,9 +8,9 @@ find_moon <- function(d, n = 6, q = 0.25, full = TRUE){
   if(full){
     dir = -1
   }
-  h <- group_by(d, Day_num) %>%
-    summarise(ml = quantile(Light, q),
+  h <- dplyr::group_by(d, Day_num) %>%
+    dplyr::summarise(ml = quantile(Light, q),
               dn = round(median(Day_num), 0)) %>%
-    arrange(dir*ml)
+    dplyr::arrange(dir*ml)
   return(h$dn[1:n])
 }

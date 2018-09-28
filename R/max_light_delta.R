@@ -6,9 +6,7 @@
 #' @param smooth.delta observations to smooth first derivative over
 #' @param smooth.light observations to smooth Light over
 #' @export
-#' @importFrom lubridate floor_date
 #' @importFrom magrittr %>%
-#' @importFrom dplyr filter
 #' @return data frame with smoothed Light and `delta` column of derivatives
 max_light_delta <- function(d,
                             depth = FALSE,
@@ -24,11 +22,11 @@ max_light_delta <- function(d,
     d <- dplyr::filter(d, Depth < depth)
   }
   d <- mutate(d, m = lubridate::floor_date(Date, period)) %>%
-    group_by(m) %>%
-    mutate(Light0 = Light,
+    dplyr::group_by(m) %>%
+    dplyr::mutate(Light0 = Light,
            Light = max(Light, na.rm = TRUE)) %>%
-    filter(Light == Light0) %>%
-    ungroup() %>%
+    dplyr::filter(Light == Light0) %>%
+    dplyr::ungroup() %>%
     dplyr::select(-m)
   d$Light <- ma(d$Light, smooth.light)
   d$Light[is.na(d$Light)] = 0

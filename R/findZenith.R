@@ -2,7 +2,6 @@
 #'
 #' @param d data frame with Light, Date columns at minimum
 #' @export
-#' @importFrom SGAT zenithSimulate
 #' @return numeric zenith angle
 findZenith <- function(d, day, lon, lat, offset = 0, threshold = 5){
   if (is.null(d$Light) |

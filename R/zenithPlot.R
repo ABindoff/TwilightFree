@@ -14,5 +14,5 @@ zenithPlot <- function (x, gps, threshold = 0, zenith = 95, offset = 0){
   x$y[zs$Light] = x$y[zs$Light] + 0.3
   x$Light <- x$y
 
-  lightImage(x, offset = offset, zlim = c(0, 1), col = viridis(40))
+  lightImage(x, offset = offset, zlim = c(0, 1), col = viridisLite::viridis(40))
 }

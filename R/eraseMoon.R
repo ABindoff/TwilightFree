@@ -5,10 +5,9 @@
 #' @param model a previously fitted predictive model
 #' @param threshold numeric Light intensity at twilight
 #' @export
-#' @importFrom lubridate hour ymd_hms
 #' @return data frame with predicted night and day states in `state` column
 eraseMoon <- function(d, return.model = FALSE , model = NULL, threshold = 0){
-  d$hms <- hour(ymd_hms(d$Date))*60 + minute(ymd_hms(d$Date))
+  d$hms <- lubridate::hour(lubridate::ymd_hms(d$Date))*60 + lubridate::minute(lubridate::ymd_hms(d$Date))
   N <- floor(0.6*max(nrow(d)))
   keep <- sample(1:nrow(d), N, replace = FALSE)
   if(is.null(model)){

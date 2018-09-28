@@ -14,7 +14,7 @@ eraseMoon <- function(d, return.model = FALSE , model = NULL, threshold = 0){
     model <- e1071::svm(factor(state) ~ hms + Light, d[keep,])
   }
   d$state <- predict(model, d)
-  d$Light[d$state == "night"] <- threshold
+  d$Light[d$state == "night"] <- threshold-1
   if(return.model){
     return(list(x = d, model = model))
   }

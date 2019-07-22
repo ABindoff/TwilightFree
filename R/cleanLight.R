@@ -1,6 +1,7 @@
 #' Find max light observations over a coarse time grid then interpolate at finer grid
 #' @export
 #' @return see help(max_light_delta) for relevant details
+#' @importFrom stats splinefun
 interpolate_max_light <- function(d, depth1 = FALSE, depth2 = FALSE, period1 = "30 minutes", period2 = "4 minutes"){
   if(depth1){
     b <- max_light(d[d$Depth < depth1,], period1)

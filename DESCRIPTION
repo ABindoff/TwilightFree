@@ -19,8 +19,8 @@ Imports:
     lubridate,
     magrittr,
     dplyr,
-    e1071
+    e1071,
+    raster
 Depends: 
-    raster,
     sp
 Remotes: SWotherspoon/SGAT, SWotherspoon/BAStag

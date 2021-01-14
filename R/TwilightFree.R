@@ -13,6 +13,7 @@ require(raster)
 #' @param fixd optional data.frame of fixed (known) locations containing `Date`, `Lon`, `Lat` (will overwrite deployed.at and retrieved.at locations if != NULL)
 #' @param sst raster of SST data from NOAA OI SST
 #' @importFrom stats dgamma dnorm median
+#' @importFrom raster extract getZ
 #' @export
 #' @return a TwilightFree model object which can be fitted using SGAT::essie()
 TwilightFree <- function(df,
@@ -50,7 +51,7 @@ TwilightFree <- function(df,
   #  (NOAA OI SST -> Weekly and Monthly -> sst.wkmean.*)
   indices <- NA
   if(!is.null(sst)){
-    indices <<- .bincode(as.POSIXct(dmin), as.POSIXct(strptime(getZ(sst), "%Y-%m-%d", "GMT"), "GMT"),
+    indices <<- .bincode(as.POSIXct(dmin), as.POSIXct(strptime(raster::getZ(sst), "%Y-%m-%d", "GMT"), "GMT"),
                          right = FALSE)
   }
 
@@ -136,6 +137,6 @@ logp0 <- function(k, x, slices) {
   if (is.na(tt)) {
     0
   } else {
-    dnorm(tt, extract(sst[[indices[k]]], x), 2, log = T)
+    dnorm(tt, raster::extract(sst[[indices[k]]], x), 2, log = T)
   }
 }

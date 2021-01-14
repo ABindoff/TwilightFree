@@ -9,7 +9,6 @@
 #' @export
 #' @import maptools
 #' @import polyclip
-#' @import raster
 #' @importFrom viridisLite viridis
 #' @importFrom graphics abline par points
 #' @importFrom utils data

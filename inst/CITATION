@@ -1,6 +1,7 @@
-citHeader("To cite TwilightFree in publications, please cite the paper describing the methods:")
+citHeader("To cite TwilightFree in publications use:")
+
 citEntry(
-entry = "Article",
+  entry    = "Article",
 author = as.person(c("Aidan D Bindoff", "Simon J Wotherspoon", "Christoph Guinet", "Mark A Hindell")),
 title = "Twilight-free geolocation from noisy light data",
 doi = "https://doi.org/10.1111/2041-210X.12953",
@@ -11,4 +12,5 @@ volume = 9,
 number = 5,
 pages = 1190--1198,
 journal = "Methods in Ecology and Evolution",
-textVersion = paste("Bindoff, AD, Wotherspoon, SJ, Guinet, C, Hindell, MA (2017). Twilight-free geolocation from noisy light data, Methods in Ecology and Evolution, 9(5), 1190-1198, https://doi.org/10.1111/2041-210X.12953")
+textVersion = "Bindoff, AD, Wotherspoon, SJ, Guinet, C, Hindell, MA (2017). Twilight-free geolocation from noisy light data, Methods in Ecology and Evolution, 9(5), 1190-1198, doi:10.1111/2041-210X.12953"
+)

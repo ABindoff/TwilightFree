@@ -6,10 +6,9 @@ Please cite (and read in full):
 Bindoff AD, Wotherspoon SJ, Guinet C, Hindell MA. Twilight-free geolocation from noisy light data. *Methods Ecol Evol.* 2017;00:1–9. https://doi.org/10.1111/2041-210X.12953  
 
 Known issues:  
-- the default track using `trip(fit, type = "full")` returns the maximum *a posteori* estimate (MAP estimate) for each day. If possible locations straddle the equator, sometimes the MAP estimate for a particularly day is obviously in the wrong hemisphere (the algorithm picks a mathematically plausible but ecologically implausible solution). Calling `essieRaster(fit)` and finding the MAP estimate for the appropriate hemisphere is a useful solution, but a simpler solution is currently in development.  
-- you may need to run `install.packages("raster", repos = "https://cran.csiro.au/")` before you can load TwilightFree or SGAT. If you already have `raster` installed, you may need to run `remove.packages("raster")` first and re-install it from the repo at CSIRO. It's one of the great mysteries.  
-- if a location cannot be determined on one or more days, `trip` will identify which days are affected and print a warning. `SGAT:essie` will also throw warnings as a subtle hint that something went wrong. It is possible that the entire track is unreliable, and efforts should be made to identify the problem (check the grid, use `thresholdPlot` to find non-solar light observations, check the threshold etc)  
-- it is **essential** that non-solar light sources are dealt with prior to estimating locations. This is the "Achille's heel" of the `TWilightFree` method. Always check using the `thresholdPlot` function, and adjust thresholds or remove outliers using `eraseLight`. Non-solar light sources may include unusually bright moons, city, ship, car, lighthouse, or factory lights.  
+- the default track using `trip(fit, type = "full")` returns the maximum *a posteori* estimate (MAP estimate) for each day. If possible locations straddle the equator, sometimes the MAP estimate for a particularly day is obviously in the wrong hemisphere (the algorithm picks a mathematically plausible but ecologically implausible solution). Calling `essieRaster(fit)` and finding the MAP estimate for the appropriate hemisphere is a useful solution.  
+- if a location cannot be determined on one or more days, `trip` will identify which days are affected and print a warning. `SGAT::essie` will also throw warnings as a subtle hint that something went wrong. It is possible that the entire track is unreliable, and efforts should be made to identify the problem (check the grid, use `thresholdPlot` to find non-solar light observations, check the threshold etc)  
+- it is **essential** that non-solar light sources are dealt with prior to estimating locations. This is the "Achille's heel" of the `TWilightFree` method. Always check using the `thresholdPlot` function, and adjust thresholds or remove non-solar observations using `eraseLight`. Non-solar light sources may include unusually bright moons, city, ship, car, lighthouse, or factory lights.  
 
 Please use the Issues tab of this git repo to search and report issues or difficulties. This method cannot estimate the impossible, but it rarely fails completely.  
 
@@ -21,6 +20,8 @@ Please use the Issues tab of this git repo to search and report issues or diffic
 `devtools::install_github("SWotherspoon/SGAT")`  
 `devtools::install_github("SWotherspoon/BAStag")`  
 `devtools::install_github("ABindoff/TwilightFree")`  
+
+
 
 Linux users (tested Ubuntu 17.10 Artful) may also need to install the following (from a terminal) in order to install `devtools` and `ncdf4` package:  
 sudo apt-get install libssl-dev  
